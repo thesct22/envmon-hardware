@@ -1,30 +1,34 @@
 import board
 import busio
 import time
+import math
+import lcdsample
 import digitalio
 import adafruit_max31865
 import adafruit_dht
+
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 cs = digitalio.DigitalInOut(board.D5)  # Chip select of the MAX31865 board.
 
 sensor = adafruit_max31865.MAX31865(spi, cs)
+
+mylcd=lcdsample.lcd()
+
+# Initial the dht device, with data pin connected to:
 dhtDevice = adafruit_dht.DHT22(board.D6, use_pulseio=False)
 
-while 1:
-    #print(sensor.temperature)
-    #print('Resistance: {0:0.3f} Ohms'.format(sensor.resistance))
-    #time.sleep (3.0)
-    
+while True:
     try:
-        temperature = dhtDevice.temperature
-        humidity = dhtDevice.humidity
-        print("PT100: "+str(sensor.temperature))
-        #print('Resistance: {0:0.3f} Ohms'.format(sensor.resistance))
-        print("DHT22: "+str(temperature))
- 
+        # Print the values to the serial port
+        mylcd.lcd_clear()
+        temp = sensor.temperature
+        hum = dhtDevice.humidity
+        mylcd.lcd_display_string("Temp: "+"{:.2f}".format(temp)+" C", 1)
+        mylcd.lcd_display_string("Hum: "+str(hum)+"%", 2)    
+        print("Temp: "+str(temp)+" C, Hum: "+str(hum)+"%")
+        
     except RuntimeError as error:
-        # Errors happen fairly often, DHT's are hard to read, just keep going
         print(error.args[0])
         time.sleep(2.0)
         continue
