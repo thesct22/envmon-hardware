@@ -21,19 +21,21 @@ dhtDevice = adafruit_dht.DHT22(board.D6, use_pulseio=False)
 while True:
     try:
         # Print the values to the serial port
-        mylcd.lcd_clear()
+        
         temp = sensor.temperature
         hum = dhtDevice.humidity
+        mylcd.lcd_clear()
         mylcd.lcd_display_string("Temp: "+"{:.2f}".format(temp)+" C", 1)
         mylcd.lcd_display_string("Hum: "+str(hum)+"%", 2)    
         print("Temp: "+str(temp)+" C, Hum: "+str(hum)+"%")
         
+        
     except RuntimeError as error:
         print(error.args[0])
-        time.sleep(2.0)
+        time.sleep(1.0)
         continue
     except Exception as error:
         dhtDevice.exit()
         raise error
  
-    time.sleep(3.0)
+    time.sleep(1.0)
