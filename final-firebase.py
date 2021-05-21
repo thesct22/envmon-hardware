@@ -34,7 +34,7 @@ while True:
         mylcd.lcd_clear()
         temp = sensor.temperature
         hum = dhtDevice.humidity
-        mylcd.lcd_display_string("Temp: "+str(temp)+" C", 1)
+        mylcd.lcd_display_string("Temp: "+"{:.2f}".format(temp)+" C", 1)
         mylcd.lcd_display_string("Hum: "+str(hum)+"%", 2)
         millisnow=math.trunc(time.time()*1000)
         print(millisnow)
